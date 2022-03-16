@@ -1,5 +1,5 @@
 # Expert Advisor pour MetaTrader4
-[![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)  [![forthebadge](http://forthebadge.com/images/badges/made-with-c-sharp.svg)](http://forthebadge.com)
+[![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
 
 Ceci est le développement d'un robot de trading qui ouvre des positions en Long/Short sur le marché du Forex. Il utilise l'indicateur PipFinite Trend pro.
 Le robot detecte une ouverture de position sur l'indicateur et place l'ordre sur la plateforme en respectant un Money Management (MM).
