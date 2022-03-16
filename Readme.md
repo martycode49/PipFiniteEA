@@ -10,8 +10,8 @@ Un ensemble de paramètre permet de configurer le robot à sa convenance.
 ## Pour commencer
 
 Voici quelques liens
-* [Indicateur Forex PipFinite Trend Pro](https://www.mql5.com/en/blogs/post/713938){:target="_blank"} - Indicateur Forex PipFinite Trend Pro
-* [metatrader4](https://www.metatrader4.com/fr){:target="_blank"} - Site Metatrader 4 
+* [Indicateur Forex PipFinite Trend Pro](https://www.mql5.com/en/blogs/post/713938){:target="\_blank"} - Indicateur Forex PipFinite Trend Pro
+* [metatrader4](https://www.metatrader4.com/fr){:target="\_blank"} - Site Metatrader 4 
 
 ### Pré-requis
 
