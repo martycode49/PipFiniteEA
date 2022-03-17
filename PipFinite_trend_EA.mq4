@@ -31,7 +31,7 @@ input double TakeProfit = 100;          //Take Profit
 input bool   ExitOpposite = false;            //Exit by Opposite Signal
 input bool   ExitScope = false;            //Exit by PipFinite Exit Scope
 input int    MaxOpenOrders = 1;            //Max. Open Orders
-input double MinEntryPercent = 78.0;      // Minimum percent for Entry trade
+input double MinEntryPercent = 75.0;      // Minimum percent for Entry trade
 input string Trailing_ = "--------------------< Trailing Stop >--------------------";//Trailing Stop Settings ............................................................................................................
 input bool   UseTrailing_Stop = false;        //Use Trailing Stop
 input double TrailingStopStart = 10;           //Trailing Stop Start
@@ -50,7 +50,8 @@ input bool   StoponFriday = false;        //Stop/Close on Friday
 double Drawdown, AllProfit = 0, point, ClosingArray[100], Lots, Sloss, Tprof, SLBUY = 0, buy = 0, sell = 0, buy1 = 0, sell1 = 0, buy2 = 0, sell2 = 0, buy3 = 0, sell3 = 0, risk, SLL = 0, LastLot = 0, lot = 0, atr = 0, Tp1, Tp1percent;
 bool Long = false, Short = false, Long2 = false, Short2 = false, Buy = false, Sell = false, Buy2 = false, Sell2 = false, Buy3 = false, Sell3 = false;
 int PipValue = 1, Lot_Digits, signal, digit_lot = 0,zz = 0, xx = 0, supp = 0, arr = 0;
-int    MagicNumber;   //Magic Number 
+int    MagicNumber;
+long   heightScreen, widthScreen;
 //HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 //+------------------------------------------------------------------+
 //| expert initialization function                                   |
@@ -441,8 +442,8 @@ void Closer() {
 
 void Indicator()
 {  
-   double buf8 = iCustom(_Symbol, 0, "Market\\PipFinite Trend PRO",8 , 1);
-   double buf9 = iCustom(_Symbol, 0, "Market\\PipFinite Trend PRO",9 , 1);
+   double buf8 = iCustom(_Symbol, 0, "Market\\PipFinite Trend PRO",8 , 1);	 // Buy marker 0.00 if not active
+   double buf9 = iCustom(_Symbol, 0, "Market\\PipFinite Trend PRO",9 , 1);	 // Sell marker
    double buf10 = iCustom(_Symbol, 0, "Market\\PipFinite Trend PRO",10 , 1); // UPTREND
    double buf11 = iCustom(_Symbol, 0, "Market\\PipFinite Trend PRO",11 , 1); // DOWNTREND
    double buf12 = iCustom(_Symbol, 0, "Market\\PipFinite Trend PRO",12 , 1); // TP1 PRICE
@@ -460,8 +461,10 @@ void Indicator()
 
    atr = iATR(NULL, 0, ATRPeriod, 0);
    
-   Buy = (buf8 != EMPTY_VALUE);
-	Sell = (buf9 != EMPTY_VALUE);
+   /*Buy = (buf8 != EMPTY_VALUE);
+	Sell = (buf9 != EMPTY_VALUE);*/
+	if(buf8 > 0) Buy=true; else Buy=false;  // Toggle Analyzer 
+	if(buf9 > 0) Sell=true; else Sell=false;
 	Tp1 = buf12;
 	Tp1percent = buf22;
 	
@@ -491,7 +494,8 @@ void Indicator()
        Settext(20,"SL: " + DoubleToString(NormalizeDouble(Sloss,Digits),Digits));  // SL value */
        Settext(21,"Orders: " + DoubleToString(total(),0));  // Order in progress */
        Settext(22,"MagicNumber: " + IntegerToString(MagicNumber));  // Magic Number */
-       
+       Settext(23,"height: " + IntegerToString(heightScreen) + "/Width: " + IntegerToString(widthScreen));  // window size */
+      
 }
 
 
@@ -502,6 +506,11 @@ void Indicator()
 int start()
 {
 	bool ban = false, band = false;
+	heightScreen = ChartGetInteger(0,CHART_HEIGHT_IN_PIXELS,0);
+   widthScreen  = ChartGetInteger(0,CHART_WIDTH_IN_PIXELS,0);
+
+   //height1 = heightScreen - height;
+   //margin = widthScreen - width;
 	MagicNumber = MakeMagicNumber(123, true);
 	LotsSize();Indicator();TrailingStops();
 	Closer();
@@ -557,10 +566,11 @@ int start()
 //MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 void Settext(int line, string text)
 {   
+      long marginLeft = widthScreen - 200; // left justify for dynamic window size
       string name="el4_"+"symbol"+IntegerToString(line);
       if(ObjectFind(name)==-1)
             ObjectCreate(name,OBJ_LABEL,0,0,0);
-      ObjectSet(name,OBJPROP_XDISTANCE,1350);
+      ObjectSet(name,OBJPROP_XDISTANCE,marginLeft);
       ObjectSet(name,OBJPROP_YDISTANCE,25*(line+2));
       ObjectSetText(name,text,10,"Tahoma",clrAquamarine);
       ObjectSet(name,OBJPROP_CORNER,0);
